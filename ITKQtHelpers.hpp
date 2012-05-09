@@ -29,9 +29,9 @@
 // Qt
 #include <QColor>
 
-namespace HelpersQt
+namespace ITKQtHelpers
 {
-
+/*
 template <typename TImage>
 QImage GetQImage(const TImage* image, const itk::ImageRegion<2>& region, const DisplayStyle& style)
 {
@@ -57,7 +57,7 @@ QImage GetQImage(const TImage* image, const itk::ImageRegion<2>& region, const D
       return QImage();
   }
   return QImage();
-}
+}*/
 
 template <typename TImage>
 QImage GetQImageColor(const TImage* const image, const itk::ImageRegion<2>& region)

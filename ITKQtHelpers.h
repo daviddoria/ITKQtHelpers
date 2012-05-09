@@ -34,7 +34,7 @@ class QTableWidget;
 
 Q_DECLARE_METATYPE(itk::ImageRegion<2>)
 
-namespace HelpersQt
+namespace ITKQtHelpers
 {
 
 ////////////////////////////////////
@@ -62,6 +62,6 @@ QImage GetQImageChannel(const TImage* const image, const itk::ImageRegion<2>& re
 
 } // end namespace
 
-#include "QtHelpers.hpp"
+#include "ITKQtHelpers.hpp"
 
 #endif
