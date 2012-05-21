@@ -16,8 +16,8 @@
  *
  *=========================================================================*/
 
-#ifndef HELPERS_QT_H
-#define HELPERS_QT_H
+#ifndef ITKQTHELPERS_H
+#define ITKQTHELPERS_H
 
 // Qt
 #include <QColor>
