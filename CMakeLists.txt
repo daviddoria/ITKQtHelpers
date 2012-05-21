@@ -14,5 +14,10 @@ list(APPEND compileflags "USE_QT_PARALLEL")
 FIND_PACKAGE(ITK REQUIRED)
 INCLUDE(${ITK_USE_FILE})
 
+if(NOT TARGET ITKHelpers)
+  add_subdirectory(ITKHelpers)
+endif()
+
+# This is not necessary because this is a template-only library (there is no cpp file to compile)
 # add_library(libITKQtHelpers ITKQtHelpers.cpp)
 # target_link_libraries(libITKQtHelpers ${ITK_LIBRARIES} ${QT_LIBRARIES})
