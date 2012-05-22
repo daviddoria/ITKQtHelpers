@@ -29,17 +29,10 @@ class QTableWidget;
 // ITK
 #include "itkImageRegion.h"
 
-// Custom
-//#include "DisplayStyle.h"
-
 Q_DECLARE_METATYPE(itk::ImageRegion<2>)
 
 namespace ITKQtHelpers
 {
-
-QImage GetQMaskImage(const Mask* const mask);
-
-QImage GetQMaskImage(const Mask* const mask, const itk::ImageRegion<2>& region);
 
 ////////////////////////////////////
 ///////// Function templates ///////

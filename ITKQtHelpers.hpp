@@ -31,33 +31,6 @@
 
 namespace ITKQtHelpers
 {
-/*
-template <typename TImage>
-QImage GetQImage(const TImage* image, const itk::ImageRegion<2>& region, const DisplayStyle& style)
-{
-  // Expects an itk::VectorImage
-  switch(style.Style)
-  {
-    case DisplayStyle::COLOR:
-      return GetQImageColor<TImage>(image, region);
-      break;
-    case DisplayStyle::MAGNITUDE:
-      return GetQImageMagnitude<TImage>(image, region);
-      break;
-    case DisplayStyle::CHANNEL:
-      {
-      typedef itk::Image<typename TImage::InternalPixelType, 2> ScalarImageType;
-      typename ScalarImageType::Pointer channelImage = ScalarImageType::New();
-      ITKHelpers::ExtractChannel<typename TImage::InternalPixelType>(image, style.Channel, channelImage);
-      return GetQImageScalar<ScalarImageType>(channelImage, region);
-      break;
-      }
-    default:
-      std::cerr << "No valid style specified." << std::endl;
-      return QImage();
-  }
-  return QImage();
-}*/
 
 template <typename TImage>
 QImage GetQImageColor(const TImage* const image, const itk::ImageRegion<2>& region)
@@ -114,6 +87,7 @@ QImage GetQImageMagnitude(const TImage* image, const itk::ImageRegion<2>& region
   magnitudeFilter->SetInput(image);
   magnitudeFilter->Update();
 
+  typedef itk::Image<unsigned char, 2> UnsignedCharScalarImageType;
   typedef itk::RescaleIntensityImageFilter<ScalarImageType, UnsignedCharScalarImageType> RescaleFilterType;
   typename RescaleFilterType::Pointer rescaleFilter = RescaleFilterType::New();
   rescaleFilter->SetOutputMinimum(0);
@@ -189,7 +163,8 @@ QImage GetQImageScalar(const TImage* image, const itk::ImageRegion<2>& region)
   return qimage.mirrored(false, true); // The flipped image region
 }
 
-
+/*
+// TODO: Replace this with a CombineImages function in the Mask class, then simply convert that image to a QImage as normal.
 template <typename TImage>
 QImage GetQImageCombinedPatch(const TImage* const image, const itk::ImageRegion<2>& sourceRegion, const itk::ImageRegion<2>& targetRegion, const Mask* const mask)
 {
@@ -246,7 +221,7 @@ QImage GetQImageCombinedPatch(const TImage* const image, const itk::ImageRegion<
 
   //return qimage; // The actual image region
   return qimage.mirrored(false, true); // The flipped image region
-}
+}*/
 
 template <typename TValue>
 QColor GetQColor(const itk::VariableLengthVector<TValue>& vec)
