@@ -248,4 +248,16 @@ QImage GetQImageCombinedPatch(const TImage* const image, const itk::ImageRegion<
   return qimage.mirrored(false, true); // The flipped image region
 }
 
+template <typename TValue>
+QColor GetQColor(const itk::VariableLengthVector<TValue>& vec)
+{
+  QColor color;
+
+  color.setRed(vec[0]);
+  color.setGreen(vec[1]);
+  color.setBlue(vec[2]);
+
+  return color;
+}
+
 } // end namespace
