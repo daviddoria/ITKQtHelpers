@@ -45,19 +45,19 @@ template <typename TImage>
 QImage GetQImageColor(const TImage* const image, const itk::ImageRegion<2>& region);
 
 template <typename TImage>
+QImage GetQImageMagnitude(const TImage* const image);
+
+template <typename TImage>
 QImage GetQImageMagnitude(const TImage* const image, const itk::ImageRegion<2>& region);
+
+template <typename TImage>
+QImage GetQImageScalar(const TImage* const image);
 
 template <typename TImage>
 QImage GetQImageScalar(const TImage* const image, const itk::ImageRegion<2>& region);
 
 template <typename TImage>
 QImage GetQImageChannel(const TImage* const image, const itk::ImageRegion<2>& region, const unsigned int channel);
-
-template <typename TImage>
-QImage GetQImageRGBA(const TImage* const image);
-
-template <typename TImage>
-QImage GetQImageRGBA(const TImage* const image, const itk::ImageRegion<2>& region);
 
 template <typename TValue>
 QColor GetQColor(const itk::VariableLengthVector<TValue>& vec);

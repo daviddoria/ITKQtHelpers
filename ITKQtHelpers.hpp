@@ -33,6 +33,12 @@ namespace ITKQtHelpers
 {
 
 template <typename TImage>
+QImage GetQImageColor(const TImage* const image)
+{
+  return GetQImageColor(image, image->GetLargestPossibleRegion());
+}
+
+template <typename TImage>
 QImage GetQImageColor(const TImage* const image, const itk::ImageRegion<2>& region)
 {
   // Get a color QImage from an ITK image.
@@ -73,6 +79,12 @@ QImage GetQImageColor(const TImage* const image, const itk::ImageRegion<2>& regi
 
   //return qimage; // The actual image region
   return qimage.mirrored(false, true); // The flipped image region
+}
+
+template <typename TImage>
+QImage GetQImageMagnitude(const TImage* const image)
+{
+  return GetQImageMagnitude(image, image->GetLargestPossibleRegion());
 }
 
 template <typename TImage>
@@ -131,6 +143,12 @@ QImage GetQImageChannel(const TImage* image, const itk::ImageRegion<2>& region, 
   indexSelectionFilter->Update();
 
   return GetQImageScalar(indexSelectionFilter->GetOutput(), region);
+}
+
+template <typename TImage>
+QImage GetQImageScalar(const TImage* const image)
+{
+  return GetQImageScalar(image, image->GetLargestPossibleRegion());
 }
 
 template <typename TImage>
