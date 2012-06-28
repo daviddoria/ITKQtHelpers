@@ -61,9 +61,13 @@ QImage GetQImageColor(const TImage* const image, const itk::ImageRegion<2>& regi
     if(Helpers::IsValidRGB(pixel[0], pixel[1], pixel[2]))
       {
       // These must be converted to int so QColor doesn't complain
-      int r = static_cast<int>(pixel[0]);
-      int g = static_cast<int>(pixel[1]);
-      int b = static_cast<int>(pixel[2]);
+//       int r = static_cast<int>(pixel[0]);
+//       int g = static_cast<int>(pixel[1]);
+//       int b = static_cast<int>(pixel[2]);
+      int r = static_cast<int>(Helpers::Force0to255(pixel[0]));
+      int g = static_cast<int>(Helpers::Force0to255(pixel[1]));
+      int b = static_cast<int>(Helpers::Force0to255(pixel[2]));
+
       QColor pixelColor(r,g,b);
       qimage.setPixel(index[0], index[1], pixelColor.rgb());
       }
