@@ -57,18 +57,22 @@ QImage GetQImageColor(const TImage* const image, const itk::ImageRegion<2>& regi
     typename TImage::PixelType pixel = imageIterator.Get();
 
     itk::Index<2> index = imageIterator.GetIndex();
-    int r = static_cast<int>(pixel[0]);
-    int g = static_cast<int>(pixel[1]);
-    int b = static_cast<int>(pixel[2]);
 
-    if(Helpers::IsValidRGB(r,g,b))
+    if(Helpers::IsValidRGB(pixel[0], pixel[1], pixel[2]))
       {
+      // These must be converted to int so QColor doesn't complain
+      int r = static_cast<int>(pixel[0]);
+      int g = static_cast<int>(pixel[1]);
+      int b = static_cast<int>(pixel[2]);
       QColor pixelColor(r,g,b);
       qimage.setPixel(index[0], index[1], pixelColor.rgb());
       }
     else
       {
-      std::cerr << "Can't set r,g,b to " << r << " " << g << " " << b << std::endl;
+      // Convert to float to output so that we see the actual values in a representable way.
+      std::cerr << "Can't set r,g,b to " << static_cast<float>(pixel[0]) << " "
+                                         << static_cast<float>(pixel[1] )<< " "
+                                         << static_cast<float>(pixel[2]) << std::endl;
       QColor pixelColor(0,0,0);
       qimage.setPixel(index[0], index[1], pixelColor.rgb());
       }
