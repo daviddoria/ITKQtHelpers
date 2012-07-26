@@ -85,8 +85,9 @@ QImage GetQImageColor(const TImage* const image, const itk::ImageRegion<2>& regi
     }
 
 
-  //return qimage; // The actual image region
-  return qimage.mirrored(false, true); // The flipped image region
+  return qimage; // The actual image region
+  // The flipped image region - the logic for this needs to be outside of this function
+  //return qimage.mirrored(false, true); // (horizontal, vertical)
 }
 
 template <typename TImage>
