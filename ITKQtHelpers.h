@@ -1,6 +1,6 @@
 /*=========================================================================
  *
- *  Copyright David Doria 2011 daviddoria@gmail.com
+ *  Copyright David Doria 2012 daviddoria@gmail.com
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ class QTableWidget;
 
 // ITK
 #include "itkImageRegion.h"
+#include "itkVariableLengthVector.h"
 
 Q_DECLARE_METATYPE(itk::ImageRegion<2>)
 
