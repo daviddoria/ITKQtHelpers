@@ -262,4 +262,16 @@ QColor GetQColor(const itk::VariableLengthVector<TValue>& vec)
   return color;
 }
 
+template <typename TComponent>
+QColor GetQColor(const itk::CovariantVector<TComponent, 3>& vec)
+{
+  QColor color;
+
+  color.setRed(vec[0]);
+  color.setGreen(vec[1]);
+  color.setBlue(vec[2]);
+
+  return color;
+}
+
 } // end namespace

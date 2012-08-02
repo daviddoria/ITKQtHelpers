@@ -27,6 +27,7 @@ class QGraphicsView;
 class QTableWidget;
 
 // ITK
+#include "itkCovariantVector.h"
 #include "itkImageRegion.h"
 #include "itkVariableLengthVector.h"
 
@@ -62,6 +63,9 @@ QImage GetQImageChannel(const TImage* const image, const itk::ImageRegion<2>& re
 
 template <typename TValue>
 QColor GetQColor(const itk::VariableLengthVector<TValue>& vec);
+
+template <typename TComponent>
+QColor GetQColor(const itk::CovariantVector<TComponent, 3>& vec);
 
 } // end namespace
 
