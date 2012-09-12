@@ -67,6 +67,10 @@ QColor GetQColor(const itk::VariableLengthVector<TValue>& vec);
 template <typename TComponent>
 QColor GetQColor(const itk::CovariantVector<TComponent, 3>& vec);
 
+/** Convert a QImage to an ITK image. */
+template <typename TImage>
+void QImageToITKImage(const QImage& qimage, TImage* const image);
+
 } // end namespace
 
 #include "ITKQtHelpers.hpp"

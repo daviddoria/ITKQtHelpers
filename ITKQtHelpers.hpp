@@ -274,4 +274,32 @@ QColor GetQColor(const itk::CovariantVector<TComponent, 3>& vec)
   return color;
 }
 
+template <typename TImage>
+void QImageToITKImage(const QImage& qimage, TImage* const image)
+{
+  itk::Index<2> corner = {{0,0}};
+  itk::Size<2> size = {{qimage.size().width(), qimage.size().height()}};
+  itk::ImageRegion<2> region(corner, size);
+  image->SetRegions(region);
+  image->Allocate();
+  image->FillBuffer(0);
+
+
+  itk::ImageRegionIteratorWithIndex<TImage> imageIterator(image, image->GetLargestPossibleRegion());
+
+  while(!imageIterator.IsAtEnd())
+  {
+    itk::Index<2> currentIndex = imageIterator.GetIndex();
+    typename TImage::PixelType pixel;
+//    pixel[0] = qimage.pixel(currentIndex[0], currentIndex[1]).red();
+    pixel[0] = qRed(qimage.pixel(currentIndex[0], currentIndex[1]));
+    pixel[1] = qBlue(qimage.pixel(currentIndex[0], currentIndex[1]));
+    pixel[2] = qGreen(qimage.pixel(currentIndex[0], currentIndex[1]));
+
+    imageIterator.Set(pixel);
+
+    ++imageIterator;
+  }
+}
+
 } // end namespace
