@@ -10,7 +10,7 @@ if(UNIX)
 endif()
 
 # Only include Helpers if it is not already available
-get_property(FoundITKHelpers GLOBAL PROPERTY ITKHelpersIncludeDir SET)
+get_property(FoundITKHelpers GLOBAL PROPERTY ITKHelpersIncludeDirs SET)
 if(NOT FoundITKHelpers)
   add_subdirectory(ITKHelpers)
 endif()
