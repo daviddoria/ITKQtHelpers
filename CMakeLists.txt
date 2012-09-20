@@ -27,7 +27,9 @@ list(APPEND compileflags "USE_QT_PARALLEL")
 set(ITKQtHelpers_libraries ${ITKQtHelpers_libraries} ${ITK_LIBRARIES})
 
 # ITK
-FIND_PACKAGE(ITK REQUIRED)
+FIND_PACKAGE(ITK REQUIRED ITKCommon ITKIOImageBase ITKTestKernel
+             ITKImageIntensity ITKImageFeature ITKMathematicalMorphology
+             ITKBinaryMathematicalMorphology ITKDistanceMap)
 INCLUDE(${ITK_USE_FILE})
 set(ITKQtHelpers_libraries ${ITKQtHelpers_libraries} ${ITK_LIBRARIES})
 

@@ -1,6 +1,6 @@
 /*=========================================================================
  *
- *  Copyright David Doria 2011 daviddoria@gmail.com
+ *  Copyright David Doria 2012 daviddoria@gmail.com
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -29,34 +29,13 @@
 // Qt
 #include <QColor>
 
-namespace HelpersQt
+namespace ITKQtHelpers
 {
 
 template <typename TImage>
-QImage GetQImage(const TImage* image, const itk::ImageRegion<2>& region, const DisplayStyle& style)
+QImage GetQImageColor(const TImage* const image)
 {
-  // Expects an itk::VectorImage
-  switch(style.Style)
-  {
-    case DisplayStyle::COLOR:
-      return GetQImageColor<TImage>(image, region);
-      break;
-    case DisplayStyle::MAGNITUDE:
-      return GetQImageMagnitude<TImage>(image, region);
-      break;
-    case DisplayStyle::CHANNEL:
-      {
-      typedef itk::Image<typename TImage::InternalPixelType, 2> ScalarImageType;
-      typename ScalarImageType::Pointer channelImage = ScalarImageType::New();
-      ITKHelpers::ExtractChannel<typename TImage::InternalPixelType>(image, style.Channel, channelImage);
-      return GetQImageScalar<ScalarImageType>(channelImage, region);
-      break;
-      }
-    default:
-      std::cerr << "No valid style specified." << std::endl;
-      return QImage();
-  }
-  return QImage();
+  return GetQImageColor(image, image->GetLargestPossibleRegion());
 }
 
 template <typename TImage>
@@ -78,18 +57,26 @@ QImage GetQImageColor(const TImage* const image, const itk::ImageRegion<2>& regi
     typename TImage::PixelType pixel = imageIterator.Get();
 
     itk::Index<2> index = imageIterator.GetIndex();
-    int r = static_cast<int>(pixel[0]);
-    int g = static_cast<int>(pixel[1]);
-    int b = static_cast<int>(pixel[2]);
 
-    if(Helpers::IsValidRGB(r,g,b))
+    if(Helpers::IsValidRGB(pixel[0], pixel[1], pixel[2]))
       {
+      // These must be converted to int so QColor doesn't complain
+//       int r = static_cast<int>(pixel[0]);
+//       int g = static_cast<int>(pixel[1]);
+//       int b = static_cast<int>(pixel[2]);
+      int r = static_cast<int>(Helpers::Force0to255(pixel[0]));
+      int g = static_cast<int>(Helpers::Force0to255(pixel[1]));
+      int b = static_cast<int>(Helpers::Force0to255(pixel[2]));
+
       QColor pixelColor(r,g,b);
       qimage.setPixel(index[0], index[1], pixelColor.rgb());
       }
     else
       {
-      std::cerr << "Can't set r,g,b to " << r << " " << g << " " << b << std::endl;
+      // Convert to float to output so that we see the actual values in a representable way.
+      std::cerr << "Can't set r,g,b to " << static_cast<float>(pixel[0]) << " "
+                                         << static_cast<float>(pixel[1] )<< " "
+                                         << static_cast<float>(pixel[2]) << std::endl;
       QColor pixelColor(0,0,0);
       qimage.setPixel(index[0], index[1], pixelColor.rgb());
       }
@@ -98,8 +85,15 @@ QImage GetQImageColor(const TImage* const image, const itk::ImageRegion<2>& regi
     }
 
 
-  //return qimage; // The actual image region
-  return qimage.mirrored(false, true); // The flipped image region
+  return qimage; // The actual image region
+  // The flipped image region - the logic for this needs to be outside of this function
+  //return qimage.mirrored(false, true); // (horizontal, vertical)
+}
+
+template <typename TImage>
+QImage GetQImageMagnitude(const TImage* const image)
+{
+  return GetQImageMagnitude(image, image->GetLargestPossibleRegion());
 }
 
 template <typename TImage>
@@ -114,6 +108,7 @@ QImage GetQImageMagnitude(const TImage* image, const itk::ImageRegion<2>& region
   magnitudeFilter->SetInput(image);
   magnitudeFilter->Update();
 
+  typedef itk::Image<unsigned char, 2> UnsignedCharScalarImageType;
   typedef itk::RescaleIntensityImageFilter<ScalarImageType, UnsignedCharScalarImageType> RescaleFilterType;
   typename RescaleFilterType::Pointer rescaleFilter = RescaleFilterType::New();
   rescaleFilter->SetOutputMinimum(0);
@@ -160,6 +155,12 @@ QImage GetQImageChannel(const TImage* image, const itk::ImageRegion<2>& region, 
 }
 
 template <typename TImage>
+QImage GetQImageScalar(const TImage* const image)
+{
+  return GetQImageScalar(image, image->GetLargestPossibleRegion());
+}
+
+template <typename TImage>
 QImage GetQImageScalar(const TImage* image, const itk::ImageRegion<2>& region)
 {
   QImage qimage(region.GetSize()[0], region.GetSize()[1], QImage::Format_RGB888);
@@ -189,7 +190,8 @@ QImage GetQImageScalar(const TImage* image, const itk::ImageRegion<2>& region)
   return qimage.mirrored(false, true); // The flipped image region
 }
 
-
+/*
+// TODO: Replace this with a CombineImages function in the Mask class, then simply convert that image to a QImage as normal.
 template <typename TImage>
 QImage GetQImageCombinedPatch(const TImage* const image, const itk::ImageRegion<2>& sourceRegion, const itk::ImageRegion<2>& targetRegion, const Mask* const mask)
 {
@@ -246,6 +248,58 @@ QImage GetQImageCombinedPatch(const TImage* const image, const itk::ImageRegion<
 
   //return qimage; // The actual image region
   return qimage.mirrored(false, true); // The flipped image region
+}*/
+
+template <typename TValue>
+QColor GetQColor(const itk::VariableLengthVector<TValue>& vec)
+{
+  QColor color;
+
+  color.setRed(vec[0]);
+  color.setGreen(vec[1]);
+  color.setBlue(vec[2]);
+
+  return color;
+}
+
+template <typename TComponent>
+QColor GetQColor(const itk::CovariantVector<TComponent, 3>& vec)
+{
+  QColor color;
+
+  color.setRed(vec[0]);
+  color.setGreen(vec[1]);
+  color.setBlue(vec[2]);
+
+  return color;
+}
+
+template <typename TImage>
+void QImageToITKImage(const QImage& qimage, TImage* const image)
+{
+  itk::Index<2> corner = {{0,0}};
+  itk::Size<2> size = {{qimage.size().width(), qimage.size().height()}};
+  itk::ImageRegion<2> region(corner, size);
+  image->SetRegions(region);
+  image->Allocate();
+  image->FillBuffer(0);
+
+
+  itk::ImageRegionIteratorWithIndex<TImage> imageIterator(image, image->GetLargestPossibleRegion());
+
+  while(!imageIterator.IsAtEnd())
+  {
+    itk::Index<2> currentIndex = imageIterator.GetIndex();
+    typename TImage::PixelType pixel;
+//    pixel[0] = qimage.pixel(currentIndex[0], currentIndex[1]).red();
+    pixel[0] = qRed(qimage.pixel(currentIndex[0], currentIndex[1]));
+    pixel[1] = qBlue(qimage.pixel(currentIndex[0], currentIndex[1]));
+    pixel[2] = qGreen(qimage.pixel(currentIndex[0], currentIndex[1]));
+
+    imageIterator.Set(pixel);
+
+    ++imageIterator;
+  }
 }
 
 } // end namespace
