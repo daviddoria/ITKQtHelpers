@@ -282,8 +282,7 @@ void QImageToITKImage(const QImage& qimage, TImage* const image)
   itk::ImageRegion<2> region(corner, size);
   image->SetRegions(region);
   image->Allocate();
-  image->FillBuffer(0);
-
+  image->FillBuffer(itk::NumericTraits<typename TImage::PixelType>::Zero);
 
   itk::ImageRegionIteratorWithIndex<TImage> imageIterator(image, image->GetLargestPossibleRegion());
 
