@@ -278,7 +278,8 @@ template <typename TImage>
 void QImageToITKImage(const QImage& qimage, TImage* const image)
 {
   itk::Index<2> corner = {{0,0}};
-  itk::Size<2> size = {{qimage.size().width(), qimage.size().height()}};
+  itk::Size<2> size = {{static_cast<itk::SizeValueType>(qimage.size().width()),
+                        static_cast<itk::SizeValueType>(qimage.size().height())}};
   itk::ImageRegion<2> region(corner, size);
   image->SetRegions(region);
   image->Allocate();
