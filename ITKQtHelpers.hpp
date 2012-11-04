@@ -166,9 +166,7 @@ QImage GetQImageColor_Vector(const TImage* const image,
     ++imageIterator;
   }
 
-  return qimage; // The actual image region
-  // The flipped image region - the logic for this needs to be outside of this function
-  //return qimage.mirrored(false, true); // (horizontal, vertical)
+  return qimage;
 }
 
 template <typename TImage>
