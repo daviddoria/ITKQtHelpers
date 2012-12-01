@@ -42,34 +42,42 @@ namespace ITKQtHelpers
 
   /** These two functions expect scalar images. */
 template <typename TImage>
-QImage GetQImageColor(const TImage* const image);
+QImage GetQImageColor(const TImage* const image, QImage::Format format);
 
 template <typename TImage>
-QImage GetQImageColor(const TImage* const image, const itk::ImageRegion<2>& region);
+QImage GetQImageColor(const TImage* const image,
+                      const itk::ImageRegion<2>& region,
+                      QImage::Format format);
 
 /** These two functions just call GetQImageColor_Vector */
 template <typename TPixel>
-QImage GetQImageColor(const itk::VectorImage<TPixel, 2>* const image);
+QImage GetQImageColor(const itk::VectorImage<TPixel, 2>* const image,
+                      QImage::Format format);
 
 template <typename TPixel>
 QImage GetQImageColor(const itk::VectorImage<TPixel, 2>* const image,
-                      const itk::ImageRegion<2>& region);
+                      const itk::ImageRegion<2>& region,
+                      QImage::Format format);
 
 /** These two functions just call GetQImageColor_Vector */
 template <typename TPixel, unsigned int DComponents>
-QImage GetQImageColor(const itk::Image<itk::CovariantVector<TPixel, DComponents> >* const image);
+QImage GetQImageColor(const itk::Image<itk::CovariantVector<TPixel, DComponents> >* const image,
+                      QImage::Format format);
 
 template <typename TPixel, unsigned int DComponents>
 QImage GetQImageColor(const itk::Image<itk::CovariantVector<TPixel, DComponents> >* const image,
-                      const itk::ImageRegion<2>& region);
+                      const itk::ImageRegion<2>& region,
+                      QImage::Format format);
 
 /** These two functions just require the image to have 3 channels and an operator[] */
 template <typename TImage>
-QImage GetQImageColor_Vector(const TImage* const image);
+QImage GetQImageColor_Vector(const TImage* const image,
+                             QImage::Format format);
 
 template <typename TImage>
 QImage GetQImageColor_Vector(const TImage* const image,
-                             const itk::ImageRegion<2>& region);
+                             const itk::ImageRegion<2>& region,
+                             QImage::Format format);
 
 template <typename TImage>
 QImage GetQImageMagnitude(const TImage* const image);
