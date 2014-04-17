@@ -38,11 +38,11 @@ QImage GetQImageColor(const TImage* const image, QImage::Format format)
   return GetQImageColor(image, image->GetLargestPossibleRegion(), format);
 }
 
+/** Get a color QImage from a scalar ITK image. */
 template <typename TImage>
 QImage GetQImageColor(const TImage* const image,
                       const itk::ImageRegion<2>& region, QImage::Format format)
 {
-  // Get a color QImage from a scalar ITK image.
   QImage qimage(region.GetSize()[0], region.GetSize()[1], format);
 
   typedef itk::RegionOfInterestImageFilter< TImage, TImage >
@@ -63,26 +63,23 @@ QImage GetQImageColor(const TImage* const image,
 
     itk::Index<2> index = imageIterator.GetIndex();
 
+    int gray = 0; // initialize
+
     if(Helpers::IsValidRGB(pixel, pixel, pixel))
     {
-      // These must be converted to int so QColor doesn't complain
-      //       int r = static_cast<int>(pixel[0]);
-      //       int g = static_cast<int>(pixel[1]);
-      //       int b = static_cast<int>(pixel[2]);
-      int gray = static_cast<int>(Helpers::Force0to255(pixel));
-
-      QColor pixelColor(gray, gray, gray);
-      qimage.setPixel(index[0], index[1], pixelColor.rgb());
+      gray = pixel;
     }
     else
     {
+      gray = static_cast<int>(Helpers::Force0to255(pixel));
       // Convert to float to output so that we see the actual values in a representable way.
-      std::cerr << "Can't set r,g,b to " << static_cast<float>(pixel) << " "
-                                         << static_cast<float>(pixel )<< " "
-                                         << static_cast<float>(pixel) << std::endl;
-      QColor pixelColor(0,0,0);
-      qimage.setPixel(index[0], index[1], pixelColor.rgb());
+//      std::cerr << "Can't set r,g,b to " << static_cast<float>(pixel) << " "
+//                                         << static_cast<float>(pixel )<< " "
+//                                         << static_cast<float>(pixel) << std::endl;
     }
+
+    QColor pixelColor(gray, gray, gray);
+    qimage.setPixel(index[0], index[1], pixelColor.rgb());
 
     ++imageIterator;
   }
