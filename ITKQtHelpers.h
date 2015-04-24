@@ -31,6 +31,7 @@ class QTableWidget;
 #include "itkImageRegion.h"
 #include "itkVariableLengthVector.h"
 #include "itkVectorImage.h"
+#include "itkImage.h"
 
 Q_DECLARE_METATYPE(itk::ImageRegion<2>)
 
